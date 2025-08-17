@@ -1,0 +1,14 @@
+[Unit]
+Description=BME280 Logger - Log sensor data to MySQL
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# /etc/bme280_logger/.env を読み込む
+EnvironmentFile=/etc/bme280_logger/.env
+ExecStart=/usr/local/bin/bme280_logger
+User=bme280logger
+Group=bme280logger
+StandardOutput=journal
+StandardError=journal

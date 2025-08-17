@@ -1,0 +1,6 @@
+This project uses third-party open source software:
+
+- Bosch BME280 driver (BSD-3-Clause)
+  https://github.com/BoschSensortec/BME280_driver
+
+The source code is included under contrib/bme280_driver with its original license.
