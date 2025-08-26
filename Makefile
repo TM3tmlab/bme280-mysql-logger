@@ -2,13 +2,14 @@
 
 CC = gcc
 CFLAGS = -Wall -O2
-LIBS = -lmysqlclient
+LIBS = -lmariadb
 
+SRCDIR = src
 BIN = bme280_logger
 # Boschのドライバをcontrib配下から取り込む
-BME280_DIR = contrib/bme280_driver
+BME280_DIR = contlib/bme280_driver
 # ビルド対象ソース
-SRCS = bme280_logger.c $(BME280_DIR)/bme280.c
+SRCS = $(SRCDIR)/bme280_logger.c $(BME280_DIR)/bme280.c
 # インクルードパス追加（bme280.h を見つけるため）
 CFLAGS += -I$(BME280_DIR)
 
@@ -38,7 +39,15 @@ install-systemd:
 	install -Dm644 systemd/bme280-logger.timer /etc/systemd/system/bme280-logger.timer
 	systemctl daemon-reload
 	systemctl enable --now bme280-logger.timer
-	
+
+uninstall-systemd:
+	systemctl stop bme280-logger.timer
+	systemctl disable --now bme280-logger.timer
+	rm -f /etc/systemd/system/bme280-logger.service
+	rm -f /etc/systemd/system/bme280-logger.timer
+	systemctl daemon-reload
+	systemctl reset-failed
+
 uninstall:
 	rm -f $(BINDIR)/$(BIN)
 	rm -f $(BINDIR)/$(SH_SCRIPT)
